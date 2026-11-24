@@ -19,6 +19,10 @@ import {
   saveMemberDetailToCache,
   saveZipLookupToCache,
 } from './utils/civicCache';
+import {
+  lookupDistrictByZip,
+  lookupRepresentativeDetails,
+} from './services/civicClient';
 import {useOnlineStatus} from './hooks/useOnlineStatus';
 import {OfflineIndicator, PWAInstallButton} from './components/PWAInstallButton';
 import {RepresentativeFab} from './components/RepresentativeFab';
@@ -82,20 +86,7 @@ export default function App() {
       setIsFromCache(false);
 
       try {
-        const res = await fetch('/api/lookup', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({zip: cleaned}),
-        });
-        const payload = (await res.json()) as DistrictLookupResult & {
-          error?: string;
-        };
-
-        if (!res.ok) {
-          throw new Error(
-            payload.error || 'Could not look up that ZIP code right now.'
-          );
-        }
+        const payload = await lookupDistrictByZip(cleaned);
 
         saveZipLookupToCache(payload);
         setLookupResult(payload);
@@ -152,28 +143,15 @@ export default function App() {
       setDetailLoading(true);
 
       try {
-        const res = await fetch('/api/representative-details', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            memberId: member.id,
-            bioguideId: member.bioguideId ?? null,
-            name: member.name,
-            title: member.title,
-            chamber: member.chamber,
-            state: member.state,
-            districtCode: member.districtCode ?? null,
-          }),
+        const payload = await lookupRepresentativeDetails({
+          memberId: member.id,
+          bioguideId: member.bioguideId ?? null,
+          name: member.name,
+          title: member.title,
+          chamber: member.chamber,
+          state: member.state,
+          districtCode: member.districtCode ?? null,
         });
-        const payload = (await res.json()) as RepresentativeDetailRecord & {
-          error?: string;
-        };
-
-        if (!res.ok) {
-          throw new Error(
-            payload.error || 'Could not load detailed public records right now.'
-          );
-        }
 
         saveMemberDetailToCache(payload);
         setMemberDetail(payload);
