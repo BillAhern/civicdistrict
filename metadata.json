@@ -1,0 +1,8 @@
+{
+  "name": "CivicDistrict",
+  "description": "Progressive Web App for looking up US congressional districts, House representatives, and Senators by ZIP code with contact channels, source-attributed fact-check records, and voting history.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

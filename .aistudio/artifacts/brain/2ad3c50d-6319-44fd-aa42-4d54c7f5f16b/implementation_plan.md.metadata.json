@@ -1,0 +1,6 @@
+{
+  "summary":  "Implementation plan for CivicDistrict, a Material Design 3 Progressive Web App for US ZIP code congressional district and representative lookup, featuring Material Extended FAB delegation cards, a four-row detail modal with collapsible fact-check and voting-record panels, live search-grounded server APIs, and offline PWA caching.",
+  "updatedAt":  "2026-11-22T22:28:18.429330727Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}
